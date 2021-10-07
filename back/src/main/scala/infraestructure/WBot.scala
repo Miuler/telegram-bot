@@ -1,14 +1,14 @@
 package infraestructure
 
-import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.bots.TelegramWebhookBot
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import pureconfig.ConfigSource
 import pureconfig.generic.auto.*
-import scribe.*
+import scribe.{error, info}
 
-class Bot extends TelegramLongPollingBot {
-
+class WBot extends TelegramWebhookBot {
   private val conf = ConfigSource.default.load[TelegramConfig] match {
     case Right(value) => value
     case Left(value) =>
@@ -20,12 +20,7 @@ class Bot extends TelegramLongPollingBot {
       sys.exit()
   }
 
-  /**
-    * Esta función se invocará cuando nuestro bot reciba un mensaje
-    * @param update Objeto de telegram cuando el mensaje manda un mensaje de texto
-    */
-  override def onUpdateReceived(update: Update): Unit = {
-
+  override def onWebhookUpdateReceived(update: Update): BotApiMethod[_] = {
     val messageTextReceived = update.getMessage.getText
     val chatId = update.getMessage.getChatId
     val message = new SendMessage()
@@ -33,13 +28,10 @@ class Bot extends TelegramLongPollingBot {
     message.setText(messageTextReceived)
 
     info(s"onUpdateReceived: $messageTextReceived")
-//    try {
-//      execute(message)
-//    } catch {
-//      case e: TelegramApiException => e.printStackTrace()
-//      case e: Exception            => e.printStackTrace()
-//    }
+    message
   }
+
+  override def getBotPath: String = "/"
 
   override def getBotUsername: String = conf.username.name
 
