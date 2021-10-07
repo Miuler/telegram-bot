@@ -15,6 +15,10 @@ object Dependencies extends Akka {
   lazy val scalatestVersion = "3.2.10"
   val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % Test
   val scopt = "com.github.scopt" %% "scopt" % "4.0.1"
+  val gcFunctions = "com.google.cloud.functions" % "functions-framework-api" % "1.0.4" % Provided
+  val telegramBot = "org.telegram" % "telegrambots" % "5.3.0"
+  val sconfig = "org.ekrich" %% "sconfig" % "1.4.4"
+  val pureconfig = "com.github.pureconfig" %% "pureconfig" % "0.17.0"
 }
 
 trait Akka {
