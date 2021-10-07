@@ -4,21 +4,10 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
-import pureconfig.ConfigSource
-import pureconfig.generic.auto.*
-import scribe.{error, info}
+import scribe.*
 
 class WBot extends TelegramWebhookBot {
-  private val conf = ConfigSource.default.load[TelegramConfig] match {
-    case Right(value) => value
-    case Left(value) =>
-      error("Configuracion mal formateada")
-      error(s"$value")
-      sys.exit()
-    case _ =>
-      error("Necesita configuracion basica")
-      sys.exit()
-  }
+  private val conf = Config.load
 
   override def onWebhookUpdateReceived(update: Update): BotApiMethod[_] = {
     val messageTextReceived = update.getMessage.getText

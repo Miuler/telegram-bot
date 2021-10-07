@@ -3,22 +3,11 @@ package infraestructure
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
-import pureconfig.ConfigSource
-import pureconfig.generic.auto.*
 import scribe.*
 
 class LongPollingBot extends TelegramLongPollingBot {
 
-  private val conf = ConfigSource.default.load[TelegramConfig] match {
-    case Right(value) => value
-    case Left(value) =>
-      error("Configuracion mal formateada")
-      error(s"$value")
-      sys.exit()
-    case _ =>
-      error("Necesita configuracion basica")
-      sys.exit()
-  }
+  private val conf = Config.load
 
   /**
     * Esta función se invocará cuando nuestro bot reciba un mensaje
