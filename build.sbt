@@ -13,7 +13,7 @@ lazy val back = (project in file("back"))
     scalaVersion := "2.13.6" /*"3.0.2"*/,
     ThisBuild / dynverSeparator := "-",
     topLevelDirectory := None,
-    libraryDependencies ++= Seq(scribe, scopt, gcFunctions, telegramBot, scalaTest, pureconfig),
+    libraryDependencies ++= Seq(scribe, scopt, gcFunctions, telegramBot, scalaTest, pureconfig, logbackClassic),
     nativeImageVersion := "21.2.0",
     // =======================================================
     cloudFunctionClass := "my.package.HelloFunction",
