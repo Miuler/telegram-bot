@@ -34,33 +34,13 @@ object Main {
         info("initializing  bot")
         if (config.verbose) Logger.root.withMinimumLevel(Level.Debug).replace()
         if (config.daemon) {
-          val webhook = new DefaultWebhook
-          //webhook.setInternalUrl()
-          //webhook.setKeyStore()
-
-          val telegramBotsApi = new TelegramBotsApi(classOf[DefaultBotSession])
-          //telegramBotsApi.registerBot(new LongPollingBot())
-          val builder = SetWebhook.builder
-          builder.url("http://localhost:8080")
-          telegramBotsApi.registerBot(new WBot(), builder.build())
-          info("Initialiced bot")
+          initWebhook()
         } else {
-          val webhook = new DefaultWebhook
-          webhook.setInternalUrl("http://localhost:8080")
-          //webhook.setInternalUrl()
-          //webhook.setKeyStore()
-
-          val telegramBotsApi = new TelegramBotsApi(classOf[DefaultBotSession], webhook)
-          //val botSession = telegramBotsApi.registerBot(new LongPollingBot())
-          val builder = SetWebhook.builder
-          builder.url("http://localhost:8080")
-          val botSession = telegramBotsApi.registerBot(new WBot(), builder.build())
-          info("Initialiced bot")
+          initWebhook()
 
           info(s"Press RETURN to stop...")
           StdIn.readLine() // let it run until user presses return
           info(s"stopping...")
-
           //botSession.stop()
           info("Stoped bot")
         }
@@ -69,6 +49,19 @@ object Main {
 
   }
 
+  def initWebhook(): Unit = {
+    val webhook = new DefaultWebhook
+    webhook.setInternalUrl("http://localhost:8080")
+    //webhook.setInternalUrl()
+    //webhook.setKeyStore()
+
+    val telegramBotsApi = new TelegramBotsApi(classOf[DefaultBotSession], webhook)
+    //val botSession = telegramBotsApi.registerBot(new LongPollingBot())
+    val builder = SetWebhook.builder
+    builder.url("http://localhost:8080")
+    telegramBotsApi.registerBot(new WBot(), builder.build())
+    info("Initialiced bot")
+  }
 }
 
 case class Config(daemon: Boolean = false, verbose: Boolean = false)
