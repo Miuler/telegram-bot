@@ -16,13 +16,13 @@ lazy val back = (project in file("back"))
     libraryDependencies ++= Seq(scribe, scopt, gcFunctions, telegramBot, scalaTest, pureconfig, logbackClassic),
     nativeImageVersion := "21.2.0",
     // =======================================================
-    cloudFunctionClass := "my.package.HelloFunction",
+    cloudFunctionClass := "infrastructure.TelegramBotFunctions",
     // The jar to deploy. Example using sbt-assembly
     cloudFunctionJar := assembly.value,
     // Environment deployment configuration.
     cloudFunctionDeployConfiguration := DeployConfiguration(
-      functionName = "my-function",
-      gcpProject = "my-google-project",
+      functionName = "telegram-bot",
+      gcpProject = "telegram-bot",
       gcpLocation = "us-central1",
       memoryMb = 512, // default value
       triggerHttp = true, // default value

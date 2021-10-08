@@ -1,4 +1,4 @@
-package infraestructure
+package infrastructure
 
 import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod

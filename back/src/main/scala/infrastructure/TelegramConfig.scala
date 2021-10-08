@@ -1,4 +1,4 @@
-package infraestructure
+package infrastructure
 
 import pureconfig.ConfigSource
 import scribe.error

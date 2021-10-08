@@ -1,5 +1,5 @@
 import com.google.cloud.functions.{HttpFunction, HttpRequest, HttpResponse}
-import infraestructure.WBot
+import infrastructure.WBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook
 import org.telegram.telegrambots.updatesreceivers.{DefaultBotSession, DefaultWebhook}
@@ -62,6 +62,7 @@ object Main {
     telegramBotsApi.registerBot(new WBot(), builder.build())
     info("Initialiced bot")
   }
+
 }
 
 case class Config(daemon: Boolean = false, verbose: Boolean = false)
