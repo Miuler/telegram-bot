@@ -15,6 +15,12 @@ lazy val back = (project in file("back"))
     topLevelDirectory := None,
     libraryDependencies ++= Seq(scribe, scopt, gcFunctions, telegramBot, scalaTest, pureconfig, logbackClassic),
     nativeImageVersion := "21.2.0",
+    assembly / assemblyMergeStrategy := {
+      case "module-info.class" => MergeStrategy.discard
+      case x =>
+        val oldStrategy = (assembly / assemblyMergeStrategy).value
+        oldStrategy(x)
+    },
     // =======================================================
     cloudFunctionClass := "infrastructure.TelegramBotFunctions",
     // The jar to deploy. Example using sbt-assembly
