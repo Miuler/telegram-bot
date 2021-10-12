@@ -5,9 +5,19 @@ name := "telegram-bot"
 
 lazy val root = (project in file("."))
   .aggregate(back)
+  .aggregate(devops)
+
+lazy val devops = (project in file("devops"))
+  .settings(
+    name := "telegram-bot-iac",
+    scalaVersion := "2.13.6" /*"3.0.2"*/,
+    ThisBuild / dynverSeparator := "-",
+    topLevelDirectory := None,
+    libraryDependencies ++= Seq(scribe, scopt, scalaTest, pureconfig, cdktf, constructs)
+  )
 
 lazy val back = (project in file("back"))
-  .enablePlugins(CloudFunctionsPlugin, NativeImagePlugin)
+  .enablePlugins(CloudFunctionsPlugin, NativeImagePlugin, SbtDotenv)
   .settings(
     name := "telegram-bot",
     scalaVersion := "2.13.6" /*"3.0.2"*/,
@@ -28,7 +38,7 @@ lazy val back = (project in file("back"))
     // Environment deployment configuration.
     cloudFunctionDeployConfiguration := DeployConfiguration(
       functionName = "telegram-bot",
-      gcpProject = "telegram-bot",
+      gcpProject = sys.env.getOrElse("GOOGLE_PROJECT", "telegram-bot"),
       gcpLocation = "us-central1",
       memoryMb = 512, // default value
       triggerHttp = true, // default value
