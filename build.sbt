@@ -1,20 +1,19 @@
-import Dependencies._
 import com.github.ingarabr.DeployConfiguration
 
 name := "telegram-bot"
 
 lazy val root = (project in file("."))
   .aggregate(back)
-  .aggregate(devops)
+//.aggregate(devops)
 
-lazy val devops = (project in file("devops"))
-  .settings(
-    name := "telegram-bot-iac",
-    scalaVersion := "2.13.6" /*"3.0.2"*/,
-    ThisBuild / dynverSeparator := "-",
-    topLevelDirectory := None,
-    libraryDependencies ++= Seq(scribe, scopt, scalaTest, pureconfig, cdktf, constructs)
-  )
+//lazy val devops = (project in file("devops"))
+//  .settings(
+//    name := "telegram-bot-iac",
+//    scalaVersion := "2.13.6" /*"3.0.2"*/,
+//    ThisBuild / dynverSeparator := "-",
+//    topLevelDirectory := None,
+//    libraryDependencies ++= Seq(scribe, scopt, scalaTest, pureconfig, cdktf, constructs)
+//  )
 
 lazy val back = (project in file("back"))
   .enablePlugins(CloudFunctionsPlugin, NativeImagePlugin, SbtDotenv)
@@ -23,7 +22,17 @@ lazy val back = (project in file("back"))
     scalaVersion := "2.13.6" /*"3.0.2"*/,
     ThisBuild / dynverSeparator := "-",
     topLevelDirectory := None,
-    libraryDependencies ++= Seq(scribe, scopt, gcFunctions, telegramBot, scalaTest, pureconfig, logbackClassic),
+    libraryDependencies ++= Seq(
+      scribe,
+      scribeJson,
+      scopt,
+      gcFunctions,
+      telegramBot,
+      scalaTest,
+      pureconfig,
+      logbackClassic,
+      logbackLogstash
+    ),
     nativeImageVersion := "21.2.0",
     assembly / assemblyMergeStrategy := {
       case "module-info.class" => MergeStrategy.discard
@@ -32,7 +41,7 @@ lazy val back = (project in file("back"))
         oldStrategy(x)
     },
     // =======================================================
-    cloudFunctionClass := "infrastructure.TelegramBotFunctions",
+    cloudFunctionClass := "infrastructure.function.TelegramBotFunctions",
     // The jar to deploy. Example using sbt-assembly
     cloudFunctionJar := assembly.value,
     // Environment deployment configuration.
@@ -42,7 +51,8 @@ lazy val back = (project in file("back"))
       gcpLocation = "us-central1",
       memoryMb = 512, // default value
       triggerHttp = true, // default value
-      allowUnauthenticated = false, // default value
+      //allowUnauthenticated = false, // default value
+      allowUnauthenticated = true, // default value
       runtime = "java11" // default value
     ),
     // The port used when testing the function locally.

@@ -4,6 +4,7 @@ object Dependencies extends Akka {
 
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.32"
   val logbackClassic = "ch.qos.logback" % "logback-classic" % "1.2.6"
+  val logbackLogstash = "net.logstash.logback" % "logstash-logback-encoder" % "6.6"
   val scribe = "com.outr" %% "scribe" % "3.5.5"
   val scribeJson = "com.outr" %% "scribe-json" % "3.5.5"
   val scribeSlf4j = "com.outr" %% "scribe-slf4j" % "3.0.2"
@@ -19,6 +20,8 @@ object Dependencies extends Akka {
   val telegramBot = "org.telegram" % "telegrambots" % "5.3.0"
   val sconfig = "org.ekrich" %% "sconfig" % "1.4.4"
   val pureconfig = "com.github.pureconfig" %% "pureconfig" % "0.17.0"
+  val cdktf = "com.hashicorp" % "cdktf" % "0.6.4"
+  val constructs = "software.constructs" % "constructs" % "10.0.5"
 }
 
 trait Akka {

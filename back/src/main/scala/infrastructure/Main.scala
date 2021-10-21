@@ -1,5 +1,6 @@
-import com.google.cloud.functions.{HttpFunction, HttpRequest, HttpResponse}
-import infrastructure.WBot
+package infrastructure
+
+import infrastructure.bot.WBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook
 import org.telegram.telegrambots.updatesreceivers.{DefaultBotSession, DefaultWebhook}
@@ -8,18 +9,10 @@ import scribe.*
 
 import scala.io.StdIn
 
-class BotFunction extends HttpFunction {
-  override def service(request: HttpRequest, response: HttpResponse): Unit = {
-    import java.io.PrintWriter
-    val writer = new PrintWriter(response.getWriter)
-    writer.printf("Hello %s!", "Test")
-  }
-}
-
 object Main {
   def main(args: Array[String]): Unit = {
 
-    val builder = OParser.builder[Config]
+    val builder = OParser.builder[ArgumentConfig]
     val oparser = {
       import builder.*
       OParser.sequence(
@@ -29,7 +22,7 @@ object Main {
         opt[Unit]('v', "verbose").action((_, c) => c.copy(verbose = true)).text("Logging with log in debug")
       )
     }
-    OParser.parse(oparser, args, Config()) match {
+    OParser.parse(oparser, args, ArgumentConfig()) match {
       case Some(config) =>
         info("initializing  bot")
         if (config.verbose) Logger.root.withMinimumLevel(Level.Debug).replace()
@@ -65,4 +58,4 @@ object Main {
 
 }
 
-case class Config(daemon: Boolean = false, verbose: Boolean = false)
+case class ArgumentConfig(daemon: Boolean = false, verbose: Boolean = false)

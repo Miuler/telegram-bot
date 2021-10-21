@@ -1,18 +1,24 @@
 package infrastructure
 
 import pureconfig.ConfigSource
-import scribe.error
 import pureconfig.generic.auto.*
+import scribe.*
 
 case class Port(number: Int) extends AnyVal
 case class Url(urs: String) extends AnyVal
 case class Username(name: String) extends AnyVal
+
 case class Token(token: String) extends AnyVal
 
-case class TelegramConfig(port: Option[Port], url: Option[Url], username: Username, token: Token)
+case class Webhook(webhook: String) extends AnyVal
+
+case class TelegramConfig(port: Option[Port], url: Option[Url], username: Username, token: Token, webhook: Webhook)
 
 object Config {
-  lazy private val telegramConfig = ConfigSource.default.load[TelegramConfig] match {
+  val url = getClass.getResource("/application.conf").toURI.toURL
+  info(s"Config file: ${url}")
+
+  lazy private val telegramConfig = ConfigSource.url(url).load[TelegramConfig] match {
     case Right(value) => value
     case Left(value) =>
       error("Configuracion mal formateada")
